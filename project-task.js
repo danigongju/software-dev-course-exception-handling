@@ -32,6 +32,7 @@ const readlineSync = require('readline-sync');
 // Initial Code with Bugs (modified to use readline-sync)
 let animals = [];
 let fees = [];
+
 function addAnimal(name, fee) {
     if (!name || fee < 0) {
         throw new Error("Invalid animal name or adoption fee!");
@@ -39,6 +40,7 @@ function addAnimal(name, fee) {
     animals.push(name);
     fees.push(fee);
 }
+
 function getAdoptionFee(animalName) {
     let index = animals.indexOf(animalName);
     if (index === -1) {
@@ -46,6 +48,8 @@ function getAdoptionFee(animalName) {
     }
     return fees[index];
 }
+
+
 // Main program
 console.log("Welcome to the Pet Shelter System");
 while (true) {
@@ -54,17 +58,29 @@ while (true) {
         console.log("Goodbye!");
         break;
     }
+    //If animal name is blank or a fee is negative, it throws an error and stops the code
+    //Solution is to add try/catch block to try validation, throw the error if invalid input and continue the code...As well as add case validation
     if (action === "add") {
-        let animal = readlineSync.question("Enter the animal's name: ");
-        let fee = Number(readlineSync.question("Enter the adoption fee: "));
-        addAnimal(animal, fee);
-        console.log(`${animal} added with a fee of $${fee}.`);
+        try {
+            let animal = readlineSync.question("Enter the animal's name: ").toLowerCase();
+            let fee = Number(readlineSync.question("Enter the adoption fee: "));
+            addAnimal(animal, fee);
+            console.log(`${animal} added with a fee of $${fee}.`);
+        } catch (err) {
+            console.log(err.message, "Please try again!");
+        }
+        //If animal name is not found, will throw an error and stop exection of the code 
+        //Solution is to add try/catch block to try validation, throw the error if invalid input and continue the code
     } else if (action === "fee") {
-        let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ");
-        console.log(`${animal}'s adoption fee is $${getAdoptionFee(animal)}.`);
+        try {
+            let animal = readlineSync.question("Enter the animal's name to find its adoption fee: ").toLowerCase();
+            console.log(`${animal}'s adoption fee is $${getAdoptionFee(animal)}.`);
+        } catch (err) {
+            console.log(err.message, "Please try again!");
+        }
     } else {
-        console.log("Invalid action. Please choose 'add', 'fee', or 'exit'.");
-    }
+    console.log("Invalid action. Please choose 'add', 'fee', or 'exit'.");
+}
 }
 
 
